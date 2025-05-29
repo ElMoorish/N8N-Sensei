@@ -47,6 +47,8 @@ const menuItems = [
   { text: 'Workflow Dojo', icon: <WorkflowIcon />, path: '/workflow-dojo', description: 'Automation studio' },
   { text: 'Training Hub', icon: <TrainingIcon />, path: '/training-hub', description: 'Learn & improve' },
   { text: 'Settings', icon: <SettingsIcon />, path: '/settings', description: 'Configuration' },
+  { text: 'Profile Settings', icon: <AccountIcon />, path: '/profile-settings', description: 'Personal information' },
+  { text: 'Preferences', icon: <ThemeIcon />, path: '/preferences', description: 'App preferences' },
 ];
 
 // Mock notifications data
@@ -450,7 +452,7 @@ function Layout({ children }) {
         </Box>
         
         <MenuItem 
-          onClick={() => { navigate('/settings'); handleUserMenuClose(); }}
+          onClick={() => { navigate('/profile-settings'); handleUserMenuClose(); }}
           sx={{ py: 1.5, '&:hover': { backgroundColor: alpha('#667eea', 0.08) } }}
         >
           <ListItemIcon sx={{ color: '#667eea' }}>
@@ -460,7 +462,7 @@ function Layout({ children }) {
         </MenuItem>
         
         <MenuItem 
-          onClick={() => { navigate('/settings'); handleUserMenuClose(); }}
+          onClick={() => { navigate('/preferences'); handleUserMenuClose(); }}
           sx={{ py: 1.5, '&:hover': { backgroundColor: alpha('#667eea', 0.08) } }}
         >
           <ListItemIcon sx={{ color: '#667eea' }}>
