@@ -1,0 +1,106 @@
+version: '3.8'
+
+services:
+  # N8N-Sensei Backend API
+  n8n-sensei-api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - N8N_HOST=host.docker.internal
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - LLAMA_HOST=host.docker.internal
+      - LLAMA_PORT=11434
+      - LM_STUDIO_HOST=host.docker.internal
+      - LM_STUDIO_PORT=1234
+      - OLLAMA_HOST=host.docker.internal
+      - OLLAMA_PORT=11434
+      - DATABASE_URL=sqlite:///./data/sensei.db
+      - BRIDGE_HOST=0.0.0.0
+      - BRIDGE_PORT=8000
+    volumes:
+      - ./data:/app/data
+      - ./backend:/app
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - sensei-network
+
+  # N8N-Sensei Frontend
+  n8n-sensei-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+      - REACT_APP_N8N_URL=http://localhost:5678
+    depends_on:
+      - n8n-sensei-api
+    restart: unless-stopped
+    networks:
+      - sensei-network
+
+  # Redis for caching and session management
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    networks:
+      - sensei-network
+
+  # Optional: N8N instance (if you don't have one running)
+  n8n:
+    image: n8nio/n8n:latest
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=admin123
+      - N8N_HOST=0.0.0.0
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=http://localhost:5678/
+      - GENERIC_TIMEZONE=UTC
+    volumes:
+      - n8n_data:/home/node/.n8n
+    restart: unless-stopped
+    networks:
+      - sensei-network
+
+  # Optional: Ollama for local AI (alternative to LLama Docker Desktop)
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+    networks:
+      - sensei-network
+    # Uncomment to enable GPU support
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+
+volumes:
+  redis_data:
+  n8n_data:
+  ollama_data:
+
+networks:
+  sensei-network:
+    driver: bridge
