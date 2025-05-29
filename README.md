@@ -46,7 +46,7 @@ Your AI Workflow Sensei - A powerful bridge system that connects AI models (Loca
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/ElMoorish/N8N-Sensei.git
 cd ai-n8n-bridge
 ```
 
