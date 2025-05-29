@@ -125,6 +125,9 @@ DATABASE_URL=sqlite:///./bridge.db
 Bitcoin: 17ospCx6MbNQfqETd1UjAQQSus8ENHXgnh
 
 
+Made by Sxedra and ElMoorish
+
+
 ## License
 
 MIT License - see LICENSE file for details
