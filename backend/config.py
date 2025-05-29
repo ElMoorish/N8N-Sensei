@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     
     OLLAMA_HOST: str = "localhost"
     OLLAMA_PORT: int = 11434
-    OLLAMA_MODEL: str = "llama2"
+    OLLAMA_MODEL: str = "llama3.2:1b"
     
     # AI Providers - Cloud
     OPENAI_API_KEY: Optional[str] = None

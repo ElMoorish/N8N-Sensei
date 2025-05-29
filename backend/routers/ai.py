@@ -14,12 +14,17 @@ from models import (
 )
 from services.ai_service import AIService
 from services.n8n_service import N8NService
-from database import get_db, AIConversation
+from database import get_db, AIConversation, User
+from auth import get_current_user
 
 router = APIRouter()
 
 @router.post("/chat", response_model=ChatResponse)
-async def chat_with_ai(request: ChatRequest, db: Session = Depends(get_db)):
+async def chat_with_ai(
+    request: ChatRequest, 
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     """
     Chat with AI about workflows and automation
     """
@@ -39,6 +44,7 @@ async def chat_with_ai(request: ChatRequest, db: Session = Depends(get_db)):
         # Save conversation to database
         conversation = AIConversation(
             session_id=session_id,
+            user_id=current_user.id,
             user_message=request.message,
             ai_response=response,
             ai_provider=request.ai_provider.value,
