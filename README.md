@@ -119,6 +119,11 @@ DATABASE_URL=sqlite:///./bridge.db
 3. Make your changes
 4. Add tests
 5. Submit a pull request
+##🙏Donations 
+
+
+Bitcoin: 17ospCx6MbNQfqETd1UjAQQSus8ENHXgnh
+
 
 ## License
 
