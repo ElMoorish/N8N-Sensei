@@ -10,8 +10,8 @@ from contextlib import asynccontextmanager
 import os
 from dotenv import load_dotenv
 
-from routers import workflows, ai, health
-from database import init_db
+from routers import workflows, ai, health, auth
+from database import init_db, init_database
 from config import settings
 
 load_dotenv()
@@ -20,6 +20,7 @@ load_dotenv()
 async def lifespan(app: FastAPI):
     # Startup
     await init_db()
+    init_database()  # Initialize with default data
     yield
     # Shutdown
     pass
@@ -42,6 +43,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(health.router, prefix="/api", tags=["health"])
+app.include_router(auth.router, prefix="/api", tags=["authentication"])
 app.include_router(workflows.router, prefix="/api/workflows", tags=["workflows"])
 app.include_router(ai.router, prefix="/api/ai", tags=["ai"])
 

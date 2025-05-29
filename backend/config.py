@@ -45,6 +45,8 @@ class Settings(BaseSettings):
     
     # Security
     SECRET_KEY: str = "your-secret-key-change-this"
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     CORS_ORIGINS: str = "http://localhost:3000,http://localhost:5678"
     
     # Features
@@ -70,6 +72,10 @@ class Settings(BaseSettings):
     @property
     def ollama_base_url(self) -> str:
         return f"http://{self.OLLAMA_HOST}:{self.OLLAMA_PORT}"
+    
+    @property
+    def secret_key(self) -> str:
+        return self.SECRET_KEY
     
     class Config:
         env_file = ".env"
